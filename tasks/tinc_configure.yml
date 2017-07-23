@@ -81,6 +81,7 @@
   synchronize:
     src: fetch/
     dest: "/etc/tinc/{{ tinc_netname }}/hosts/"
+    use_ssh_args: yes
   notify:
     - Restart Service
 
