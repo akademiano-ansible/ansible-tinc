@@ -49,7 +49,6 @@
     dest: "/etc/tinc/{{ tinc_netname }}/hosts/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
     line: "Subnet = {{ tinc_vpn_ip }}/32"
     create: yes
-  when: tinc_mode == 'router'
   notify:
     - Restart Service
 
