@@ -74,27 +74,29 @@
 - name: fetch tinc hosts file after key creation
   fetch:
     src: "/etc/tinc/{{ tinc_netname }}/hosts/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
-    dest: "fetch/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
+    dest: "{{tinc_fetch_dir}}/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
     flat: yes
 
-#- name: sync the fetched tinc hosts files on each host
-#  synchronize:
-#    src: fetch/
-#    dest: "/etc/tinc/{{ tinc_netname }}/hosts/"
-#    use_ssh_args: yes
-#  notify:
-#    - Restart Service
+- name: sync the fetched tinc hosts files on each host
+  copy:
+    src: "{{tinc_fetch_dir}}/"
+    dest: "/etc/tinc/{{ tinc_netname }}/hosts/"
+    owner: root
+    group: root
+    mode: u=rwX,g=rX,o=rX
+  notify:
+    - Restart Service
 
-- name: add nodes to /etc/hosts (ansible_inventory resolves to vpn_ip)
-  lineinfile:
-    dest: /etc/hosts
-    regexp: "^{{ hostvars[item].tinc_vpn_ip }}"
-    line: "{{ hostvars[item].tinc_vpn_ip }} {{ item }}"
-    state: present
-  when: hostvars[item].tinc_vpn_ip is defined
-  with_items: "{{ play_hosts }}"
-  tags:
-    - tinc_internal_hosts
+#- name: add nodes to /etc/hosts (ansible_inventory resolves to vpn_ip)
+#  lineinfile:
+#    dest: /etc/hosts
+#    regexp: "^{{ hostvars[item].tinc_vpn_ip }}"
+#    line: "{{ hostvars[item].tinc_vpn_ip }} {{ item }}"
+#    state: present
+#  when: hostvars[item].tinc_vpn_ip is defined
+#  with_items: "{{ play_hosts }}"
+#  tags:
+#    - tinc_internal_hosts
 
 # Ensure the systemd daemon is reloaded and the service is restarted
 - meta: flush_handlers

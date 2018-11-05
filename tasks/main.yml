@@ -4,6 +4,17 @@
 - name: refresh cache
   apt:
     update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - tinc_requirements
+    - install
+  changed_when: false
+  failed_when: false
+
+- name: install rsync
+  package:
+    name: rsync
+    state: latest
   tags:
     - tinc_requirements
     - install

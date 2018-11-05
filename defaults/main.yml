@@ -10,3 +10,4 @@ tinc_key_size: 4096
 # See https://www.tinc-vpn.org/documentation/tinc.conf.5.
 tinc_mode: router
 tinc_vpn_interface: tun0
+tinc_fetch_dir: fetch
