@@ -38,7 +38,7 @@
 - name: ensure tinc hosts file binds to physical ip address
   lineinfile:
     dest: "/etc/tinc/{{ tinc_netname }}/hosts/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
-    line: "Address = {{ tinc_control_plane_bind_ip }}"
+    line: "Address = {{ tinc_control_plane_bind_ip | default (hostvars[inventory_hostname][tinc_bind_network_interface | default('ansible_eth0', true)][tinc_bind_address_family|default('ipv4', true)]['address'], true) }}"
     create: yes
   when: inventory_hostname in groups['tinc_spine_nodes']
   notify:
@@ -77,13 +77,13 @@
     dest: "fetch/{{ inventory_hostname | replace('.','_') | replace('-','_') }}"
     flat: yes
 
-- name: sync the fetched tinc hosts files on each host
-  synchronize:
-    src: fetch/
-    dest: "/etc/tinc/{{ tinc_netname }}/hosts/"
-    use_ssh_args: yes
-  notify:
-    - Restart Service
+#- name: sync the fetched tinc hosts files on each host
+#  synchronize:
+#    src: fetch/
+#    dest: "/etc/tinc/{{ tinc_netname }}/hosts/"
+#    use_ssh_args: yes
+#  notify:
+#    - Restart Service
 
 - name: add nodes to /etc/hosts (ansible_inventory resolves to vpn_ip)
   lineinfile:

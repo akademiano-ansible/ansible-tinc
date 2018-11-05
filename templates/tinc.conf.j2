@@ -4,7 +4,7 @@ AddressFamily = {{ tinc_address_family }}
 {% endif %}
 Interface = {{ tinc_vpn_interface }}
 {% for host in groups['tinc_spine_nodes'] %}
-{% if inventory_hostname != hostvars[host]['inventory_hostname'] and inventory_hostname in groups['tinc_leaf_nodes'] %}
+{% if inventory_hostname != hostvars[host]['inventory_hostname'] %}
 ConnectTo = {{ hostvars[host]['inventory_hostname'] | replace('.','_') | replace('-','_') }}
 {% endif %}
 {% endfor %}
