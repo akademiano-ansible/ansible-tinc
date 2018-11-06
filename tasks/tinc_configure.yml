@@ -105,3 +105,5 @@
   systemd:
     name: "{{ tinc_service_name }}"
     enabled: yes
+    state: started
+
