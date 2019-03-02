@@ -1,4 +1,5 @@
 Name = {{ inventory_hostname | replace('.','_') | replace('-','_') }}
+Mode = {{ tinc_mode }}
 {% if tinc_address_family is defined %}
 AddressFamily = {{ tinc_address_family }}
 {% endif %}

@@ -1,4 +1,20 @@
 # Inspired by https://github.com/thisismitch/ansible-tinc
+
+- name: clear localhost tinc dir
+  delegate_to: localhost
+  run_once: true
+  file:
+    path: "{{tinc_fetch_dir}}"
+    state: absent
+  changed_when: false
+
+- name: clear tinc dir
+  file:
+    path: "/etc/tinc/{{ tinc_netname }}/hosts/"
+    state: absent
+  become: yes
+  changed_when: false
+
 - name: ensure tinc netname directory exists
   file:
     path: "/etc/tinc/{{ tinc_netname }}/hosts"
@@ -99,7 +115,6 @@
 #    - tinc_internal_hosts
 
 # Ensure the systemd daemon is reloaded and the service is restarted
-- meta: flush_handlers
 
 - name: ensure tinc is enabled
   systemd:

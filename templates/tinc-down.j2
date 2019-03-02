@@ -1,2 +1,6 @@
 #!/bin/sh
 ip link set dev {{ tinc_vpn_interface }} down
+
+{% for route in tinc_vpn_routes %}
+ip route del {{route.dest}} via {{route.gateway}}
+{% endfor %}
