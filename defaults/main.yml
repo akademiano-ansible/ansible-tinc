@@ -1,8 +1,9 @@
 ---
 # defaults file for tinc
 
-service_name: "{{ tinc_service_name }}"
+tinc_netname: tincnet
 tinc_service_name: tinc
+service_name: "{{ tinc_service_name }}"
 tinc_key_size: 4096
 # tinc_address_family can be ipv4/ipv6/any (or undefined)
 tinc_address_family: ipv4
@@ -10,7 +11,8 @@ tinc_address_family: ipv4
 # See https://www.tinc-vpn.org/documentation/tinc.conf.5.
 tinc_mode: switch
 tinc_vpn_interface: tun0
-tinc_fetch_dir: fetch
+tinc_fetch_dir: "~/tinc/fetch/"
+tinc_vpn_cidr: "/24"
 
 #tinc_bind_network_interface: ansible_eth0
 #tinc_bind_address_family: ipv4
